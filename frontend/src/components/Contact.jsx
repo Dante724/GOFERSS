@@ -7,6 +7,9 @@ import { Textarea } from './ui/textarea';
 import { MapPin, Phone, Mail, Send } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 const Contact = () => {
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -15,25 +18,47 @@ const Contact = () => {
     phone: '',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Mock submission - will be connected to backend later
-    console.log('Contact form submitted:', formData);
-    
-    toast({
-      title: "Message Sent!",
-      description: "We'll get back to you within 24 hours.",
-    });
+    setSubmitting(true);
+    try {
+      const response = await fetch(`${API}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
 
-    // Reset form
-    setFormData({ name: '', email: '', phone: '', message: '' });
+      if (!response.ok) {
+        throw new Error('Failed to submit contact form');
+      }
+
+      toast({
+        title: "Message Sent!",
+        description: "We'll get back to you within 24 hours.",
+      });
+
+      // Reset form
+      setFormData({ name: '', email: '', phone: '', message: '' });
+    } catch (error) {
+      console.error('Contact form error:', error);
+      toast({
+        title: "Submission Failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -167,10 +192,17 @@ const Contact = () => {
               {/* Submit Button */}
               <Button
                 type="submit"
+                disabled={submitting}
                 className="w-full bg-orange-600 hover:bg-orange-700 text-white py-6 text-lg font-semibold"
               >
-                <Send className="mr-2" size={20} />
-                Send Message
+                {submitting ? (
+                  'Sending...'
+                ) : (
+                  <>
+                    <Send className="mr-2" size={20} />
+                    Send Message
+                  </>
+                )}
               </Button>
             </form>
           </div>

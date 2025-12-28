@@ -1,12 +1,44 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { blogPosts } from '../mockData';
+import axios from 'axios';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Calendar, User, ArrowRight } from 'lucide-react';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 const BlogPreview = () => {
+  const [blogs, setBlogs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBlogs();
+  }, []);
+
+  const fetchBlogs = async () => {
+    try {
+      const response = await axios.get(`${API}/blogs`);
+      // Get only first 3 blogs for preview
+      setBlogs(response.data.slice(0, 3));
+    } catch (error) {
+      console.error('Error fetching blogs:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-gradient-to-b from-white to-orange-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-600">Loading articles...</p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="py-20 bg-gradient-to-b from-white to-orange-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -25,7 +57,7 @@ const BlogPreview = () => {
 
         {/* Blog Cards */}
         <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {blogPosts.map((post) => (
+          {blogs.map((post) => (
             <Card
               key={post.id}
               className="group hover:shadow-xl transition-all duration-300 border-2 border-transparent hover:border-orange-200 overflow-hidden"
