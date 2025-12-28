@@ -34,7 +34,7 @@ const BookingModal = ({ isOpen, onClose, package: pkg }) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     // Validation
@@ -47,52 +47,90 @@ const BookingModal = ({ isOpen, onClose, package: pkg }) => {
       return;
     }
 
-    // Calculate final price
-    let finalPrice = pkg?.price || 0;
-    if (pkg?.hasOptionalGhatWalk && formData.includeGhatWalk) {
-      finalPrice = pkg.priceWithGhatWalk;
+    try {
+      // Calculate final price
+      let finalPrice = pkg?.price || 0;
+      if (pkg?.hasOptionalGhatWalk && formData.includeGhatWalk) {
+        finalPrice = pkg.priceWithGhatWalk;
+      }
+
+      // Save booking to backend
+      const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+      const bookingData = {
+        packageId: pkg?.id,
+        customerName: formData.name,
+        email: formData.email || null,
+        phone: formData.phone,
+        travelDate: format(formData.date, 'yyyy-MM-dd'),
+        guests: parseInt(formData.guests),
+        includeGhatWalk: formData.includeGhatWalk,
+        message: formData.message || null
+      };
+
+      const response = await fetch(`${BACKEND_URL}/api/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create booking');
+      }
+
+      const booking = await response.json();
+
+      // Get WhatsApp number from config
+      const configResponse = await fetch(`${BACKEND_URL}/api/config`);
+      const config = await configResponse.json();
+      const whatsappNumber = config.whatsappNumber;
+
+      // Create WhatsApp message
+      const whatsappMessage = `🕉️ *New Booking Request - Gofers Varanasi*\n\n` +
+        `*Booking ID:* ${booking.id}\n` +
+        `*Package:* ${pkg?.name}\n` +
+        `*Duration:* ${pkg?.duration}\n` +
+        `*Price:* ₹${finalPrice}\n\n` +
+        `*Customer Details:*\n` +
+        `Name: ${formData.name}\n` +
+        `Phone: ${formData.phone}\n` +
+        `Email: ${formData.email || 'N/A'}\n` +
+        `Travel Date: ${format(formData.date, 'PPP')}\n` +
+        `Guests: ${formData.guests}\n` +
+        (pkg?.hasOptionalGhatWalk ? `Ghat Walk: ${formData.includeGhatWalk ? 'Yes' : 'No'}\n` : '') +
+        (formData.message ? `\n*Message:* ${formData.message}` : '');
+
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      
+      toast({
+        title: "Booking Confirmed!",
+        description: "Opening WhatsApp to complete your booking...",
+      });
+
+      // Open WhatsApp
+      window.open(whatsappUrl, '_blank');
+
+      // Reset form and close modal
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        date: null,
+        guests: '',
+        message: '',
+        includeGhatWalk: false
+      });
+      onClose();
+
+    } catch (error) {
+      console.error('Booking error:', error);
+      toast({
+        title: "Booking Failed",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive"
+      });
     }
-
-    // Create WhatsApp message
-    const whatsappMessage = `🕉️ *New Booking Request - Gofers Varanasi*\n\n` +
-      `*Package:* ${pkg?.name}\n` +
-      `*Duration:* ${pkg?.duration}\n` +
-      `*Price:* ₹${finalPrice}\n\n` +
-      `*Customer Details:*\n` +
-      `Name: ${formData.name}\n` +
-      `Phone: ${formData.phone}\n` +
-      `Email: ${formData.email}\n` +
-      `Travel Date: ${format(formData.date, 'PPP')}\n` +
-      `Guests: ${formData.guests}\n` +
-      (pkg?.hasOptionalGhatWalk ? `Ghat Walk: ${formData.includeGhatWalk ? 'Yes' : 'No'}\n` : '') +
-      (formData.message ? `\n*Message:* ${formData.message}` : '');
-
-    // TODO: Replace with actual WhatsApp number from backend
-    const whatsappNumber = "919876543210"; // This will be configurable
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
-    // Save to database (mock - will be implemented in backend)
-    console.log('Booking Data:', { ...formData, packageId: pkg?.id, finalPrice });
-    
-    toast({
-      title: "Booking Request Submitted!",
-      description: "Opening WhatsApp to confirm your booking...",
-    });
-
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
-
-    // Reset form and close modal
-    setFormData({
-      name: '',
-      email: '',
-      phone: '',
-      date: null,
-      guests: '',
-      message: '',
-      includeGhatWalk: false
-    });
-    onClose();
   };
 
   if (!pkg) return null;
