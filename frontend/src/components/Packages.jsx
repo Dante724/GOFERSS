@@ -1,19 +1,49 @@
-import React, { useState } from 'react';
-import { tourPackages } from '../mockData';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './ui/card';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Clock, IndianRupee, Check, Sparkles } from 'lucide-react';
 import BookingModal from './BookingModal';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const API = `${BACKEND_URL}/api`;
+
 const Packages = () => {
+  const [packages, setPackages] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedPackage, setSelectedPackage] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    fetchPackages();
+  }, []);
+
+  const fetchPackages = async () => {
+    try {
+      const response = await axios.get(`${API}/packages`);
+      setPackages(response.data);
+    } catch (error) {
+      console.error('Error fetching packages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleBookNow = (pkg) => {
     setSelectedPackage(pkg);
     setIsModalOpen(true);
   };
+
+  if (loading) {
+    return (
+      <section id="packages" className="py-20 bg-gradient-to-b from-orange-50 to-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-600">Loading packages...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="packages" className="py-20 bg-gradient-to-b from-orange-50 to-white">
@@ -34,7 +64,7 @@ const Packages = () => {
 
         {/* Package Cards */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {tourPackages.map((pkg, index) => (
+          {packages.map((pkg) => (
             <Card
               key={pkg.id}
               className="group hover:shadow-2xl transition-all duration-300 border-2 border-orange-100 hover:border-orange-300 overflow-hidden"
