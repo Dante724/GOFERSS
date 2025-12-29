@@ -11,7 +11,8 @@ from datetime import datetime
 from models import (
     Package, Booking, BookingCreate, BookingStatus, BookingStatusUpdate,
     Blog, BlogCreate, BlogUpdate, Contact, ContactCreate,
-    AdminLogin, Admin, AdminInDB, Token, ConfigResponse
+    AdminLogin, Admin, AdminInDB, Token, ConfigResponse,
+    Service, ServiceCategory
 )
 from auth import (
     verify_password, get_password_hash, create_access_token, get_current_admin
