@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
+import Services from '../components/Services';
 import Packages from '../components/Packages';
 import About from '../components/About';
 import BlogPreview from '../components/BlogPreview';
@@ -12,6 +13,7 @@ const HomePage = () => {
     <div>
       <Navbar />
       <Hero />
+      <Services />
       <Packages />
       <About />
       <BlogPreview />
