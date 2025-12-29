@@ -34,6 +34,27 @@ app = FastAPI(title="Gofers Varanasi Tourism API")
 api_router = APIRouter(prefix="/api")
 
 
+# ==================== SERVICES ====================
+
+@api_router.get("/services/categories")
+async def get_service_categories():
+    """Get all service categories"""
+    categories = await db.service_categories.find().to_list(100)
+    return categories
+
+@api_router.get("/services/{category_id}")
+async def get_services_by_category(category_id: str):
+    """Get all services for a category"""
+    services = await db.services.find({"categoryId": category_id, "active": True}).to_list(100)
+    return services
+
+@api_router.get("/services/all/list")
+async def get_all_services():
+    """Get all active services"""
+    services = await db.services.find({"active": True}).to_list(500)
+    return services
+
+
 # ==================== PACKAGES ====================
 
 @api_router.get("/packages", response_model=List[Package])
