@@ -37,19 +37,19 @@ api_router = APIRouter(prefix="/api")
 
 # ==================== SERVICES ====================
 
-@api_router.get("/services/categories")
+@api_router.get("/services/categories", response_model=List[ServiceCategory])
 async def get_service_categories():
     """Get all service categories"""
     categories = await db.service_categories.find().to_list(100)
     return categories
 
-@api_router.get("/services/{category_id}")
+@api_router.get("/services/{category_id}", response_model=List[Service])
 async def get_services_by_category(category_id: str):
     """Get all services for a category"""
     services = await db.services.find({"categoryId": category_id, "active": True}).to_list(100)
     return services
 
-@api_router.get("/services/all/list")
+@api_router.get("/services/all/list", response_model=List[Service])
 async def get_all_services():
     """Get all active services"""
     services = await db.services.find({"active": True}).to_list(500)
