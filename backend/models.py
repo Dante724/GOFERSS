@@ -31,6 +31,26 @@ class Package(BaseModel):
     hasOptionalGhatWalk: bool = False
     active: bool = True
 
+# Service Models (for Boat, Cab, Stay, Guide services)
+class Service(BaseModel):
+    id: str
+    categoryId: str
+    name: str
+    description: str
+    priceStart: int
+    priceEnd: int
+    duration: str
+    capacity: str
+    image: str
+    highlights: List[str]
+    active: bool = True
+
+class ServiceCategory(BaseModel):
+    id: str
+    name: str
+    description: str
+    icon: str
+
 # Booking Models
 class BookingCreate(BaseModel):
     packageId: str
