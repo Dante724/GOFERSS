@@ -305,6 +305,46 @@ async def initialize_database():
     return {"message": "Database initialized successfully with all services and packages"}
 
 
+@api_router.post("/reset-db")
+async def reset_database():
+    """Reset and reinitialize database (Development only)"""
+    # Drop all collections
+    await db.packages.delete_many({})
+    await db.services.delete_many({})
+    await db.service_categories.delete_many({})
+    await db.bookings.delete_many({})
+    await db.blogs.delete_many({})
+    await db.contacts.delete_many({})
+    await db.admins.delete_many({})
+    
+    # Insert service categories
+    await db.service_categories.insert_many(SERVICE_CATEGORIES)
+    
+    # Insert boat services
+    await db.services.insert_many(BOAT_SERVICES)
+    
+    # Insert cab services
+    await db.services.insert_many(CAB_SERVICES)
+    
+    # Insert packages
+    await db.packages.insert_many(INITIAL_PACKAGES)
+    
+    # Insert blogs
+    await db.blogs.insert_many(INITIAL_BLOGS)
+    
+    # Create default admin
+    admin = AdminInDB(
+        id=f"admin_{int(datetime.utcnow().timestamp())}",
+        username="admin",
+        email="admin@gofers.com",
+        password=get_password_hash("admin123"),
+        role="admin"
+    )
+    await db.admins.insert_one(admin.dict())
+    
+    return {"message": "Database reset and reinitialized successfully with all services"}
+
+
 # ==================== DOWNLOAD ====================
 
 from fastapi.responses import FileResponse
