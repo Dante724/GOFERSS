@@ -33,15 +33,18 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3">
-            <img 
-              src={companyInfo.logo} 
-              alt="Gofers Logo" 
-              className="h-12 w-12 rounded-full object-cover border-2 border-orange-600"
-            />
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">Gofers</h1>
-              <p className="text-xs text-orange-600">Varanasi Tours</p>
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative">
+              <img 
+                src={companyInfo.logo} 
+                alt="Gofers Logo" 
+                className="h-14 w-14 rounded-full object-cover border-2 border-orange-600 shadow-lg group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
+              />
+              <div className="absolute inset-0 rounded-full bg-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+            </div>
+            <div className="transition-all duration-300">
+              <h1 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-300">Gofers</h1>
+              <p className="text-xs text-orange-600 font-medium">Varanasi Tours</p>
             </div>
           </Link>
 
