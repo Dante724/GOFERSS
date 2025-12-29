@@ -12,8 +12,12 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <div className="flex items-center space-x-2 mb-4">
-              <div className="text-3xl">🕉️</div>
+            <div className="flex items-center space-x-3 mb-4">
+              <img 
+                src={companyInfo.logo} 
+                alt="Gofers Logo" 
+                className="h-12 w-12 rounded-full object-cover border-2 border-orange-600"
+              />
               <div>
                 <h3 className="text-2xl font-bold text-white">Gofers</h3>
                 <p className="text-sm text-orange-400">Varanasi Tours</p>
