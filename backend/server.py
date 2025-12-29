@@ -277,6 +277,15 @@ async def initialize_database():
     if existing_packages > 0:
         return {"message": "Database already initialized"}
     
+    # Insert service categories
+    await db.service_categories.insert_many(SERVICE_CATEGORIES)
+    
+    # Insert boat services
+    await db.services.insert_many(BOAT_SERVICES)
+    
+    # Insert cab services
+    await db.services.insert_many(CAB_SERVICES)
+    
     # Insert packages
     await db.packages.insert_many(INITIAL_PACKAGES)
     
@@ -293,7 +302,7 @@ async def initialize_database():
     )
     await db.admins.insert_one(admin.dict())
     
-    return {"message": "Database initialized successfully with seed data"}
+    return {"message": "Database initialized successfully with all services and packages"}
 
 
 # ==================== DOWNLOAD ====================
