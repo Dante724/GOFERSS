@@ -275,6 +275,24 @@ async def initialize_database():
     return {"message": "Database initialized successfully with seed data"}
 
 
+# ==================== DOWNLOAD ====================
+
+from fastapi.responses import FileResponse
+
+@api_router.get("/download-project")
+async def download_project():
+    """Download complete project as zip"""
+    zip_path = "/app/gofers-varanasi-tourism.zip"
+    if os.path.exists(zip_path):
+        return FileResponse(
+            path=zip_path,
+            filename="gofers-varanasi-tourism.zip",
+            media_type="application/zip"
+        )
+    else:
+        raise HTTPException(status_code=404, detail="Zip file not found")
+
+
 # Include the router in the main app
 app.include_router(api_router)
 
