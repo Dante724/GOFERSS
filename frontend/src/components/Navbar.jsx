@@ -35,12 +35,14 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 group">
             <div className="relative">
+              {/* Pulsing ring effect */}
+              <div className="absolute inset-0 rounded-full bg-orange-600 animate-ping opacity-20"></div>
               <img 
                 src={companyInfo.logo} 
                 alt="Gofers Logo" 
-                className="h-14 w-14 rounded-full object-cover border-2 border-orange-600 shadow-lg group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
+                className="relative h-14 w-14 rounded-full object-cover border-2 border-orange-600 shadow-lg group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
               />
-              <div className="absolute inset-0 rounded-full bg-orange-600 opacity-0 group-hover:opacity-20 transition-opacity duration-300"></div>
+              <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
             </div>
             <div className="transition-all duration-300">
               <h1 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-300">Gofers</h1>
