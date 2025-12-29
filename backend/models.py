@@ -16,10 +16,14 @@ class ContactStatus(str, Enum):
 # Package Models
 class Package(BaseModel):
     id: str = Field(default_factory=lambda: str(datetime.utcnow().timestamp()))
+    categoryId: Optional[str] = "packages"
     name: str
     duration: str
     price: int
+    priceStart: Optional[int] = None
+    priceEnd: Optional[int] = None
     priceWithGhatWalk: Optional[int] = None
+    capacity: Optional[str] = None
     image: str
     description: str
     inclusions: List[str]
