@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
+import { companyInfo } from '../mockData';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,8 +33,12 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-bold text-orange-600">🕉️</div>
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src={companyInfo.logo} 
+              alt="Gofers Logo" 
+              className="h-12 w-12 rounded-full object-cover border-2 border-orange-600"
+            />
             <div>
               <h1 className="text-xl font-bold text-gray-900">Gofers</h1>
               <p className="text-xs text-orange-600">Varanasi Tours</p>
