@@ -18,6 +18,7 @@ from auth import (
     verify_password, get_password_hash, create_access_token, get_current_admin
 )
 from seed_data import INITIAL_PACKAGES, INITIAL_BLOGS, SERVICE_CATEGORIES, BOAT_SERVICES, CAB_SERVICES
+from email_service import send_booking_email
 
 
 ROOT_DIR = Path(__file__).parent
