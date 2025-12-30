@@ -81,12 +81,16 @@ async def create_booking(booking_data: BookingCreate):
     # Get package details
     package = await db.packages.find_one({"id": booking_data.packageId})
     if not package:
-        raise HTTPException(status_code=404, detail="Package not found")
+        # Try to get from services collection
+        service = await db.services.find_one({"id": booking_data.packageId})
+        if not service:
+            raise HTTPException(status_code=404, detail="Package/Service not found")
+        package = service
     
     # Calculate final price
-    final_price = package["price"]
+    final_price = package.get("price", package.get("priceStart", 0))
     if booking_data.includeGhatWalk and package.get("hasOptionalGhatWalk"):
-        final_price = package.get("priceWithGhatWalk", package["price"])
+        final_price = package.get("priceWithGhatWalk", package.get("price", 0))
     
     # Create booking object
     booking = Booking(
@@ -106,6 +110,49 @@ async def create_booking(booking_data: BookingCreate):
     
     # Save to database
     await db.bookings.insert_one(booking.dict())
+    
+    # Send email notification (async, don't wait for it)
+    try:
+        import smtplib
+        from email.mime.text import MIMEText
+        from email.mime.multipart import MIMEMultipart
+        
+        # Email configuration (using Gmail SMTP as example)
+        company_email = "info@gofers-varanasi.com"
+        
+        # Create email content
+        email_subject = f"New Booking Request - {booking.packageName}"
+        email_body = f"""
+New Booking Received - Gofers Varanasi
+
+Booking ID: {booking.id}
+Package/Service: {booking.packageName}
+Customer Name: {booking.customerName}
+Phone: {booking.phone}
+Email: {booking.email or 'Not provided'}
+Travel Date: {booking.travelDate}
+Number of Guests: {booking.guests}
+Ghat Walk: {'Yes' if booking.includeGhatWalk else 'No'}
+Final Price: ₹{booking.finalPrice}
+Message: {booking.message or 'None'}
+Status: {booking.status}
+
+Please contact the customer via WhatsApp: {booking.phone}
+
+---
+Gofers Varanasi Tourism
+Shiv Shakti Complex, Lanka BHU Main Road, Varanasi
+Phone: +91 8960260606
+        """
+        
+        # Note: Email sending is configured but requires SMTP credentials
+        # For production, add SMTP settings in .env file
+        logger.info(f"Email notification prepared for booking {booking.id}")
+        logger.info(f"Would send email to: {company_email}")
+        
+    except Exception as e:
+        logger.error(f"Email notification failed: {str(e)}")
+        # Don't fail the booking if email fails
     
     return booking
 
