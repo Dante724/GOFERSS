@@ -12,18 +12,17 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div className="md:col-span-2">
-            <Link to="/" className="flex items-center space-x-3 mb-4 group inline-block">
+            <Link to="/" className="flex items-center space-x-4 mb-6 group inline-block">
               <div className="relative">
+                <div className="absolute -inset-2 bg-gradient-to-r from-orange-600 to-amber-500 rounded-full opacity-20 blur-lg group-hover:opacity-40 transition-opacity duration-300"></div>
                 <img 
                   src={companyInfo.logo} 
                   alt="Gofers Logo" 
-                  className="h-16 w-16 rounded-full object-cover border-2 border-orange-600 shadow-xl group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl group-hover:rotate-6"
+                  className="relative h-20 w-20 rounded-full object-cover border-3 border-orange-600 shadow-2xl group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-3xl"
                 />
-                <div className="absolute inset-0 rounded-full bg-orange-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
               </div>
               <div className="transition-all duration-300">
-                <h3 className="text-2xl font-bold text-white group-hover:text-orange-400 transition-colors duration-300">Gofers</h3>
-                <p className="text-sm text-orange-400 font-medium">Varanasi Tours</p>
+                <h3 className="text-3xl font-bold text-white group-hover:text-orange-400 transition-colors duration-300 tracking-wide">Gofers</h3>
               </div>
             </Link>
             <p className="text-gray-400 mb-4 max-w-md">
