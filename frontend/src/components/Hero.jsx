@@ -32,9 +32,56 @@ const Hero = () => {
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        {/* Om Symbol */}
-        <div className="text-6xl md:text-8xl mb-6 animate-pulse">
-          🕉️
+        {/* Majestic Om Symbol */}
+        <div className="relative inline-block mb-8">
+          {/* Glowing backdrop */}
+          <div className="absolute inset-0 blur-3xl bg-gradient-to-r from-orange-500 via-amber-400 to-yellow-500 opacity-40 animate-pulse"></div>
+          
+          {/* Om Symbol with SVG styling */}
+          <div className="relative">
+            <svg 
+              viewBox="0 0 200 200" 
+              className="w-32 h-32 md:w-40 md:h-40 mx-auto drop-shadow-2xl"
+              style={{
+                filter: 'drop-shadow(0 0 30px rgba(251, 146, 60, 0.8)) drop-shadow(0 0 60px rgba(251, 146, 60, 0.4))'
+              }}
+            >
+              {/* Golden Om Symbol Path */}
+              <defs>
+                <linearGradient id="omGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style={{ stopColor: '#fbbf24', stopOpacity: 1 }} />
+                  <stop offset="50%" style={{ stopColor: '#f59e0b', stopOpacity: 1 }} />
+                  <stop offset="100%" style={{ stopColor: '#ea580c', stopOpacity: 1 }} />
+                </linearGradient>
+                <filter id="glow">
+                  <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              
+              {/* Om Symbol - Simplified elegant path */}
+              <text 
+                x="50%" 
+                y="50%" 
+                dominantBaseline="middle" 
+                textAnchor="middle" 
+                fontSize="120" 
+                fontWeight="bold"
+                fill="url(#omGradient)"
+                filter="url(#glow)"
+                style={{ fontFamily: 'serif' }}
+              >
+                ॐ
+              </text>
+            </svg>
+            
+            {/* Rotating ring effect */}
+            <div className="absolute inset-0 border-4 border-orange-400 rounded-full opacity-20 animate-spin" style={{ animationDuration: '20s' }}></div>
+            <div className="absolute inset-2 border-2 border-amber-300 rounded-full opacity-30 animate-spin" style={{ animationDuration: '15s', animationDirection: 'reverse' }}></div>
+          </div>
         </div>
 
         {/* Main Heading */}
