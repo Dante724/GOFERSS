@@ -112,45 +112,9 @@ async def create_booking(booking_data: BookingCreate):
     # Save to database
     await db.bookings.insert_one(booking.dict())
     
-    # Send email notification (async, don't wait for it)
+    # Send email notification asynchronously
     try:
-        import smtplib
-        from email.mime.text import MIMEText
-        from email.mime.multipart import MIMEMultipart
-        
-        # Email configuration (using Gmail SMTP as example)
-        company_email = "info@gofers-varanasi.com"
-        
-        # Create email content
-        email_subject = f"New Booking Request - {booking.packageName}"
-        email_body = f"""
-New Booking Received - Gofers Varanasi
-
-Booking ID: {booking.id}
-Package/Service: {booking.packageName}
-Customer Name: {booking.customerName}
-Phone: {booking.phone}
-Email: {booking.email or 'Not provided'}
-Travel Date: {booking.travelDate}
-Number of Guests: {booking.guests}
-Ghat Walk: {'Yes' if booking.includeGhatWalk else 'No'}
-Final Price: ₹{booking.finalPrice}
-Message: {booking.message or 'None'}
-Status: {booking.status}
-
-Please contact the customer via WhatsApp: {booking.phone}
-
----
-Gofers Varanasi Tourism
-Shiv Shakti Complex, Lanka BHU Main Road, Varanasi
-Phone: +91 8960260606
-        """
-        
-        # Note: Email sending is configured but requires SMTP credentials
-        # For production, add SMTP settings in .env file
-        logger.info(f"Email notification prepared for booking {booking.id}")
-        logger.info(f"Would send email to: {company_email}")
-        
+        send_booking_email(booking.dict())
     except Exception as e:
         logger.error(f"Email notification failed: {str(e)}")
         # Don't fail the booking if email fails
