@@ -40,13 +40,12 @@ const Navbar = () => {
               <img 
                 src={companyInfo.logo} 
                 alt="Gofers Logo" 
-                className="relative h-14 w-14 rounded-full object-cover border-2 border-orange-600 shadow-lg group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-xl"
+                className="relative h-16 w-16 rounded-full object-cover border-3 border-orange-600 shadow-xl group-hover:border-orange-500 transition-all duration-300 group-hover:scale-110 group-hover:shadow-2xl"
               />
               <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-400 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
             </div>
             <div className="transition-all duration-300">
-              <h1 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-300">Gofers</h1>
-              <p className="text-xs text-orange-600 font-medium">Varanasi Tours</p>
+              <h1 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors duration-300 tracking-wide">Gofers</h1>
             </div>
           </Link>
 
