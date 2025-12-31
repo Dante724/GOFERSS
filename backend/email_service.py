@@ -24,7 +24,7 @@ def send_booking_email(booking_data: dict):
         smtp_port = int(os.environ.get("SMTP_PORT", "587"))
         smtp_user = os.environ.get("SMTP_USER", "")
         smtp_password = os.environ.get("SMTP_PASSWORD", "")
-        company_email = os.environ.get("COMPANY_EMAIL", "info@gofers-varanasi.com")
+        company_email = os.environ.get("COMPANY_EMAIL", "wegofers@gmail.com")
         
         # Check if SMTP is configured
         if not smtp_user or not smtp_password:
