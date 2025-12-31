@@ -5,7 +5,7 @@ export const companyInfo = {
   name: "Gofers",
   tagline: "Your Gateway to Spiritual Varanasi",
   description: "Gofers is a premier tour and travel company based in Varanasi, dedicated to providing authentic spiritual experiences. We specialize in curated tour packages that showcase the rich cultural heritage and divine essence of Banaras.",
-  email: "info@gofers-varanasi.com",
+  email: "wegofers@gmail.com",
   phone: "+91 8960260606",
   address: "Shiv Shakti Complex, Lanka BHU Main Road, Varanasi",
   whatsapp: "",
