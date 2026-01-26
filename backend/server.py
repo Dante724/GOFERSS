@@ -53,6 +53,28 @@ app.add_middleware(
 api_router = APIRouter(prefix="/api")
 
 
+# ==================== HEALTH CHECK ====================
+
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint"""
+    try:
+        # Test MongoDB connection
+        await db.command("ping")
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "timestamp": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": "disconnected",
+            "error": str(e),
+            "timestamp": datetime.utcnow().isoformat()
+        }
+
+
 # ==================== SERVICES ====================
 
 @api_router.get("/services/categories", response_model=List[ServiceCategory])
