@@ -24,10 +24,17 @@ from email_service import send_booking_email
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+# MongoDB connection with error handling
+try:
+    mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+    client = AsyncIOMotorClient(mongo_url, serverSelectionTimeoutMS=5000)
+    db = client[os.environ.get('DB_NAME', 'gofers_db')]
+    logger = logging.getLogger(__name__)
+    logger.info(f"Connected to MongoDB: {mongo_url}")
+except Exception as e:
+    logger = logging.getLogger(__name__)
+    logger.error(f"Failed to connect to MongoDB: {str(e)}")
+    raise
 
 # Create the main app without a prefix
 app = FastAPI(title="Gofers Varanasi Tourism API")
