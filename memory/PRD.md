@@ -1,5 +1,9 @@
 # Gofers Varanasi Tourism - Product Requirements Document
 
+## Latest Update (Feb 2026)
+- **Fixed:** Navbar "Book Now" button now opens booking modal directly (instead of scrolling to packages section)
+- **Implementation:** Created BookingContext in App.js to share modal state globally across all components
+
 ## Original Problem Statement
 Build a tourism website for a Varanasi-based company named "Gofers" that allows users to book various services including Hotel Stays, Cab Rentals, Boat Rides, and Tour Guides. The booking should redirect to WhatsApp with pre-filled booking details.
 
