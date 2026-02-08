@@ -173,13 +173,22 @@ const BookingModal = ({ isOpen, onClose, package: pkg }) => {
               <span className="font-semibold text-gray-900">Duration:</span>
               <span className="text-gray-700">{pkg.duration}</span>
             </div>
-            <div className="flex justify-between items-center">
-              <span className="font-semibold text-gray-900">Price:</span>
-              <span className="text-2xl font-bold text-orange-600 flex items-center">
-                <IndianRupee size={20} />
-                {displayPrice}
-              </span>
-            </div>
+            {displayPrice > 0 ? (
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-gray-900">Price:</span>
+                <span className="text-2xl font-bold text-orange-600 flex items-center">
+                  <IndianRupee size={20} />
+                  {displayPrice}
+                </span>
+              </div>
+            ) : (
+              <div className="flex justify-between items-center">
+                <span className="font-semibold text-gray-900">Price:</span>
+                <span className="text-lg font-semibold text-orange-600">
+                  Custom Quote
+                </span>
+              </div>
+            )}
           </div>
 
           {/* Name */}
