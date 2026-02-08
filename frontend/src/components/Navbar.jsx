@@ -3,10 +3,12 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import { Button } from './ui/button';
 import { companyInfo } from '../mockData';
+import { useBooking } from '../App';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const location = useLocation();
+  const { openBookingModal } = useBooking();
 
   const navLinks = [
     { name: 'Home', path: '/' },
@@ -29,14 +31,8 @@ const Navbar = () => {
   };
 
   const handleBookNowClick = () => {
-    if (location.pathname !== '/') {
-      window.location.href = '/#packages';
-    } else {
-      const element = document.querySelector('#packages');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    // Open booking modal directly
+    openBookingModal();
     setIsOpen(false);
   };
 
