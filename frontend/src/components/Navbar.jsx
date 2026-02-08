@@ -28,6 +28,18 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  const handleBookNowClick = () => {
+    if (location.pathname !== '/') {
+      window.location.href = '/#packages';
+    } else {
+      const element = document.querySelector('#packages');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+    setIsOpen(false);
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-orange-100 shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -70,7 +82,11 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <Button className="bg-orange-600 hover:bg-orange-700 text-white">
+            <Button 
+              onClick={handleBookNowClick}
+              className="bg-orange-600 hover:bg-orange-700 text-white"
+              data-testid="navbar-book-now-btn"
+            >
               Book Now
             </Button>
           </div>
@@ -109,7 +125,11 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+            <Button 
+              onClick={handleBookNowClick}
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+              data-testid="navbar-mobile-book-now-btn"
+            >
               Book Now
             </Button>
           </div>
