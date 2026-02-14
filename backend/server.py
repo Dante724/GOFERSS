@@ -239,7 +239,7 @@ async def create_contact(contact_data: ContactCreate):
     
     await db.contacts.insert_one(contact.dict())
     try:
-    send_booking_email({
+        send_booking_email({
         "id": contact.id,
         "packageName": "Contact Form",
         "customerName": contact.name,
