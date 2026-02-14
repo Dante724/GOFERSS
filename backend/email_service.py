@@ -116,8 +116,7 @@ def send_booking_email(booking_data: dict):
         msg.attach(part)
         
         # Send email
-        server = smtplib.SMTP(smtp_host, smtp_port)
-        server.starttls()
+        server = smtplib.SMTP_SSL(smtp_host, smtp_port)
         server.login(smtp_user, smtp_password)
         server.send_message(msg)
         server.quit()
