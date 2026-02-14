@@ -34,7 +34,9 @@ Message: {booking_data.get("message")}
         msg.attach(MIMEText(body, "plain"))
 
         server = smtplib.SMTP(smtp_host, smtp_port)
+        server.ehlo()
         server.starttls()
+        server.ehlo()
         server.login(smtp_user, smtp_password)
         server.send_message(msg)
         server.quit()
