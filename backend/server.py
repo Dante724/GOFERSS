@@ -229,6 +229,8 @@ async def delete_blog(blog_id: str, admin: str = Depends(get_current_admin)):
 @api_router.post("/contacts", response_model=Contact)
 async def create_contact(contact_data: ContactCreate):
     """Submit contact form"""
+
+    # Create contact object
     contact = Contact(
         id=f"contact_{int(datetime.utcnow().timestamp())}",
         name=contact_data.name,
@@ -237,23 +239,31 @@ async def create_contact(contact_data: ContactCreate):
         message=contact_data.message
     )
 
+    # Save to database FIRST
     await db.contacts.insert_one(contact.dict())
 
-    try:
-        send_booking_email({
-            "id": contact.id,
-            "packageName": "Contact Form",
-            "customerName": contact.name,
-            "email": contact.email,
-            "phone": contact.phone,
-            "travelDate": "Not specified",
-            "guests": "N/A",
-            "finalPrice": "N/A",
-            "message": contact.message
-        })
-    except Exception as e:
-        logger.error(f"Email failed: {e}")
+    # Send email in background (so API doesn't hang)
+    import threading
 
+    def send_email():
+        try:
+            send_booking_email({
+                "id": contact.id,
+                "packageName": "Contact Form",
+                "customerName": contact.name,
+                "email": contact.email,
+                "phone": contact.phone,
+                "travelDate": "Not specified",
+                "guests": "N/A",
+                "finalPrice": "N/A",
+                "message": contact.message
+            })
+        except Exception as e:
+            logger.error(f"Email sending failed: {str(e)}")
+
+    threading.Thread(target=send_email, daemon=True).start()
+
+    # RETURN IMMEDIATELY (important)
     return contact
 
 @api_router.get("/contacts", response_model=List[Contact])
