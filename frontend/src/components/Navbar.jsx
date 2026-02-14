@@ -130,7 +130,10 @@ const Navbar = () => {
                 </Link>
               )
             ))}
-            <Button className="w-full bg-orange-600 hover:bg-orange-700 text-white">
+            <Button 
+              onClick={handleBookNow}
+              className="w-full bg-orange-600 hover:bg-orange-700 text-white"
+            >
               Book Now
             </Button>
           </div>
