@@ -238,6 +238,20 @@ async def create_contact(contact_data: ContactCreate):
     )
     
     await db.contacts.insert_one(contact.dict())
+    try:
+    send_booking_email({
+        "id": contact.id,
+        "packageName": "Contact Form",
+        "customerName": contact.name,
+        "email": contact.email,
+        "phone": contact.phone,
+        "travelDate": "Not specified",
+        "guests": "N/A",
+        "finalPrice": "N/A",
+        "message": contact.message
+    })
+except Exception as e:
+    logger.error(f"Email failed: {e}")
     return contact
 
 @api_router.get("/contacts", response_model=List[Contact])
