@@ -20,6 +20,10 @@ from auth import (
 from seed_data import INITIAL_PACKAGES, INITIAL_BLOGS, SERVICE_CATEGORIES, BOAT_SERVICES, CAB_SERVICES
 from email_service import send_booking_email
 
+import logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -386,13 +390,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
 
 @app.on_event("shutdown")
 async def shutdown_db_client():
