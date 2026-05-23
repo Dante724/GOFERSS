@@ -243,6 +243,9 @@ async def init_db():
 
 # ================= ROUTER =================
 
+@app.get("/health")
+async def health_check():
+    return {"status": "ok", "message": "Gofers API is alive 🙏"}
 app.include_router(api_router)
 
 # ================= CORS =================
