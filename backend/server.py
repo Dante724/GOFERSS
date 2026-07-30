@@ -134,11 +134,16 @@ async def create_booking(booking_data: BookingCreate):
 
 @api_router.get("/blogs", response_model=List[Blog])
 async def get_blogs(published: Optional[bool] = True):
-
     query = {"published": published} if published else {}
-
     return await db.blogs.find(query).to_list(100)
 
+
+@api_router.get("/blogs/{blog_id}", response_model=Blog)
+async def get_blog(blog_id: str):
+    blog = await db.blogs.find_one({"id": blog_id})
+    if not blog:
+        raise HTTPException(404, "Blog not found")
+    return blog
 
 # ================= CONTACTS (FIXED) =================
 
