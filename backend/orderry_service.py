@@ -19,9 +19,9 @@ def create_orderry_lead(name, phone, email, message):
     }
     
     payload = {
-        "contact_name": name,
-        "contact_phone": phone,
-        "contact_email": email,
+        "client_name": name,
+        "client_phone": phone,
+        "client_email": email,
         "notes": message,
         "type_id": 2669
     }
