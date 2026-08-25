@@ -23,7 +23,7 @@ def create_orderry_lead(name, phone, email, message):
         "contact_phone": phone,
         "contact_email": email,
         "notes": message,
-        "leadtype_id": 1  # 👈 NEW - Default lead type
+        "lead_type_id": 1
     }
     
     logger.info(f"Sending to Orderry: {payload}")
