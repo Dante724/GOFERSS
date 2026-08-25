@@ -11,7 +11,8 @@ def create_orderry_lead(name, phone, email, message):
         logger.warning("ORDERRY_API_KEY not set")
         return None
     
-    url = "https://api.orderry.com/v2/lead/"
+    # CORRECT URL - without /v2/
+    url = "https://api.orderry.com/lead/"
     
     headers = {
         "Authorization": f"Bearer {ORDERRY_API_KEY}",
