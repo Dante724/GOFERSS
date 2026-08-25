@@ -25,8 +25,12 @@ def create_orderry_lead(name, phone, email, message):
         "notes": message
     }
     
+    logger.info(f"Sending to Orderry: {payload}")
+    
     try:
         response = requests.post(url, json=payload, headers=headers, timeout=10)
+        logger.info(f"Orderry Response Status: {response.status_code}")
+        logger.info(f"Orderry Response Body: {response.text}")
         return response.json()
     except Exception as e:
         logger.error(f"Orderry error: {e}")
